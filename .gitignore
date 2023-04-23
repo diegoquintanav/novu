@@ -12,6 +12,7 @@ build
 coverage
 .DS_Store
 dist
+
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/tasks.xml

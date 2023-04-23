@@ -147,10 +147,15 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-project
       - uses: mansagroup/nrwl-nx-action@v3
+        if: ${{matrix.projectName == '@novu/application-generic' }}
+        with:
+          targets: lint,build
+          projects: ${{matrix.projectName}}
+      - uses: mansagroup/nrwl-nx-action@v3
+        if: ${{matrix.projectName != '@novu/application-generic' }}
         with:
           targets: lint,build,test
-          parallel: 5
-          projects: ${{join(fromJson(needs.get-affected.outputs.test-packages), ',')}}
+          projects: ${{matrix.projectName}}
 
   test_e2e:
     name: Test E2E
@@ -200,12 +205,6 @@ jobs:
       - uses: ./.github/actions/setup-project
       - uses: ./.github/actions/setup-redis-cluster
       - uses: mansagroup/nrwl-nx-action@v3
-        if: ${{matrix.projectName == '@novu/application-generic' }}
-        with:
-          targets: lint,build
-          projects: ${{matrix.projectName}}
-      - uses: mansagroup/nrwl-nx-action@v3
-        if: ${{matrix.projectName != '@novu/application-generic' }}
         with:
           targets: lint,build,test
           projects: ${{matrix.projectName}}

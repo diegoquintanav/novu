@@ -8,11 +8,11 @@ export async function getPackageFolders(folder) {
     engineStrict: false
   });
 
-  const providers = content.allProjects.filter((project) => {
-    const contains =  project.dir.includes('providers/');
+  const filteredItems = content.allProjects.filter((project) => {
+    const contains =  project.dir.includes(folder + '/');
 
     return contains;
   } ).map((project) => project.manifest.name);
 
-  return providers;
+  return filteredItems;
 }

@@ -2,7 +2,7 @@ import { getPackageFolders } from './get-packages-folder.mjs';
 import spawn from 'cross-spawn';
 import { fileURLToPath } from 'url';
 import path from 'path';
-
+import * as fs from 'fs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const processArguments = process.argv.slice(2);
 
@@ -84,15 +84,36 @@ function getAffectedCommandResult(str) {
 }
 
 async function affectedProjectsContainingTask(taskName, baseBranch) {
+  const cachePath = taskName + baseBranch + '-contain-task-cache.json';
+
+  const isCacheExists = fs.existsSync(cachePath);
+  if (isCacheExists) {
+    const cache = fs.readFileSync(cachePath, 'utf8');
+
+    return JSON.parse(cache);
+  }
   // pnpm nx print-affected --target=[task] --base [base branch] --select=tasks.target.project
   return commaSeparatedListToArray(
     getAffectedCommandResult(
       await pnpmRun('nx', 'print-affected', '--target', taskName, '--base', baseBranch, '--select=tasks.target.project')
     )
-  );
+  ).then(result => {
+    fs.writeFileSync(cachePath, JSON.stringify(result));
+
+    return result;
+  });
 }
 
 async function allProjectsContainingTask(taskName) {
+  const cachePath = taskName + '-all-contain-task-cache.json';
+
+  const isCacheExists = fs.existsSync(cachePath);
+  if (isCacheExists) {
+    const cache = fs.readFileSync(cachePath, 'utf8');
+
+    return JSON.parse(cache);
+  }
+
   // pnpm nx print-affected --target=[task] --files package.json --select=tasks.target.project
   return commaSeparatedListToArray(
     getAffectedCommandResult(
@@ -106,7 +127,11 @@ async function allProjectsContainingTask(taskName) {
         '--select=tasks.target.project'
       )
     )
-  );
+  ).then((result) => {
+    fs.writeFileSync(cachePath, JSON.stringify(result));
+
+    return result;
+  });
 }
 
 async function printAffectedProjectsContainingTask() {

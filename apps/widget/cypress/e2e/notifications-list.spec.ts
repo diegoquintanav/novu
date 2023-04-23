@@ -12,6 +12,8 @@ describe('Notifications List', function () {
           token: session.token,
           subscriberId: session.subscriber.subscriberId,
           count: 5,
+          organizationId: session.organization._id,
+          templateId: session.templates[0]._id,
         });
 
         cy.wait(1000);

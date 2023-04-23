@@ -115,7 +115,7 @@ async function allProjectsContainingTask(taskName) {
   }
 
   // pnpm nx print-affected --target=[task] --files package.json --select=tasks.target.project
-  return commaSeparatedListToArray(
+  const result = commaSeparatedListToArray(
     getAffectedCommandResult(
       await pnpmRun(
         'nx',
@@ -127,11 +127,11 @@ async function allProjectsContainingTask(taskName) {
         '--select=tasks.target.project'
       )
     )
-  ).then((result) => {
-    fs.writeFileSync(cachePath, JSON.stringify(result));
+  );
 
-    return result;
-  });
+  fs.writeFileSync(cachePath, JSON.stringify(result));
+
+  return result;
 }
 
 async function printAffectedProjectsContainingTask() {

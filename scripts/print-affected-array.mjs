@@ -84,7 +84,7 @@ function getAffectedCommandResult(str) {
 }
 
 async function affectedProjectsContainingTask(taskName, baseBranch) {
-  const cachePath = taskName + baseBranch + '-contain-task-cache.json';
+  const cachePath = taskName + baseBranch.replace('/', '').replace('/', '') + '-contain-task-cache.json';
 
   const isCacheExists = fs.existsSync(cachePath);
   if (isCacheExists) {
@@ -98,7 +98,7 @@ async function affectedProjectsContainingTask(taskName, baseBranch) {
       await pnpmRun('nx', 'print-affected', '--target', taskName, '--base', baseBranch, '--select=tasks.target.project')
     )
   );
-  
+
   fs.writeFileSync(cachePath, JSON.stringify(result));
 
   return result;

@@ -42,6 +42,8 @@ describe('Notifications List', function () {
       token: this.session.token,
       subscriberId: this.session.subscriber.subscriberId,
       count: 3,
+      organizationId: this.session.organization._id,
+      templateId: this.session.templates[0]._id,
     });
 
     cy.wait('@getNotificationsFirstPage');
@@ -55,6 +57,8 @@ describe('Notifications List', function () {
       token: this.session.token,
       subscriberId: this.session.subscriber.subscriberId,
       count: 1,
+      organizationId: this.session.organization._id,
+      templateId: this.session.templates[0]._id,
     });
 
     cy.getByTestId('unseen-count-label').contains('9');

@@ -2,7 +2,7 @@ import { readProjects } from '@pnpm/filter-workspace-packages';
 import * as fs from 'fs';
 
 export async function getPackageFolders(folder) {
-  const cachePath = '/' + folder + '-changes-cache.json';
+  const cachePath = folder + '-changes-cache.json';
 
   const isCacheExists = fs.existsSync(cachePath);
   if (isCacheExists) {

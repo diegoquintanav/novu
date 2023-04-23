@@ -70,9 +70,10 @@ describe('Changes Screen', function () {
     createNotification();
     cy.waitForNetworkIdle(500);
     createNotification();
-    cy.waitForNetworkIdle(500);
 
     cy.waitLoadTemplatePage(() => {
+      cy.waitForNetworkIdle(500);
+
       cy.visit('/changes');
       cy.waitForNetworkIdle(500);
       cy.wait(['@changes']);

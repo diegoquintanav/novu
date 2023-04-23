@@ -9,7 +9,7 @@ const processArguments = process.argv.slice(2);
 const ALL_FLAG = '--all';
 const TASK_NAME = processArguments[0];
 const BASE_BRANCH_NAME = processArguments[1];
-const PROVIDERS = processArguments[2];
+const GROUP = processArguments[2];
 
 const ROOT_PATH = path.resolve(__dirname, '..');
 const ENCODING_TYPE = 'utf8';
@@ -110,7 +110,8 @@ async function allProjectsContainingTask(taskName) {
 }
 
 async function printAffectedProjectsContainingTask() {
-  const providers = await getPackageFolders();
+  const providers = await getPackageFolders('providers');
+  const packages = await getPackageFolders('packages');
 
   let projects =
     BASE_BRANCH_NAME === ALL_FLAG
@@ -122,8 +123,15 @@ async function printAffectedProjectsContainingTask() {
     projects = projects.filter((project) => !providers.includes(project));
   }
 
-  if (PROVIDERS) {
+  const foundPackages = projects.filter((project) => packages.includes(project));
+  if (foundPackages.length) {
+    projects = projects.filter((project) => !packages.includes(project));
+  }
+
+  if (GROUP === 'providers') {
     console.log(JSON.stringify(foundProviders));
+  } else if (GROUP === 'packages') {
+    console.log(JSON.stringify(foundPackages));
   } else {
     console.log(JSON.stringify(projects));
   }

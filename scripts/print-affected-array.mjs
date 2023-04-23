@@ -93,15 +93,15 @@ async function affectedProjectsContainingTask(taskName, baseBranch) {
     return JSON.parse(cache);
   }
   // pnpm nx print-affected --target=[task] --base [base branch] --select=tasks.target.project
-  return commaSeparatedListToArray(
+  const result = commaSeparatedListToArray(
     getAffectedCommandResult(
       await pnpmRun('nx', 'print-affected', '--target', taskName, '--base', baseBranch, '--select=tasks.target.project')
     )
-  ).then(result => {
-    fs.writeFileSync(cachePath, JSON.stringify(result));
+  );
+  
+  fs.writeFileSync(cachePath, JSON.stringify(result));
 
-    return result;
-  });
+  return result;
 }
 
 async function allProjectsContainingTask(taskName) {

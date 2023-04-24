@@ -90,7 +90,7 @@ describe('Changes Screen', function () {
     cy.waitForNetworkIdle(500);
 
     cy.visit('/templates');
-    cy.wait('@notificationTemplates');
+    cy.reload();
     cy.waitForNetworkIdle(500);
     cy.awaitAttachedGetByTestId('notifications-template').find('tbody tr').should('have.length', 2);
   });

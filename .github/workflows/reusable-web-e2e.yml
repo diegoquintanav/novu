@@ -35,17 +35,13 @@ jobs:
         with:
           cypress: true
 
+
       - uses: mansagroup/nrwl-nx-action@v3
         with:
-          targets: lint
-          projects: '@novu/web'
+          targets: lint,build
+          projects: '@novu/web,@novu/api,@novu/worker'
 
       - uses: ./.github/actions/start-localstack
-
-      - uses: mansagroup/nrwl-nx-action@v3
-        with:
-          targets: build
-          projects: @novu/web,@novu/api,@novu/worker
 
       - name: Start Client
         working-directory: apps/web
@@ -53,7 +49,7 @@ jobs:
           REACT_APP_API_URL: http://localhost:1336
           REACT_APP_WS_URL: http://localhost:1340
           REACT_APP_WEBHOOK_URL: http://localhost:1341
-        run: pnpm pnpm start:static:build &
+        run: pnpm start:static:build &
 
       - name: Start WS
         run: pnpm start:ws:test &
@@ -71,17 +67,8 @@ jobs:
       - name: Install wait-on plugin
         run: npm i -g wait-on
 
-      - name: Wait on API
-        run: wait-on --timeout=180000 http://localhost:1336/v1/health-check
-
-      - name: Wait on worker
-        run: wait-on --timeout=180000 http://localhost:1342/v1/health-check
-
-      - name: Wait on WS
-        run: wait-on --timeout=180000 http://localhost:1340/v1/health-check
-
-      - name: Wait on WEB
-        run: wait-on --timeout=180000 http://localhost:4200
+      - name: Wait on Services
+        run: wait-on --timeout=180000 http://localhost:1336/v1/health-check http://localhost:1342/v1/health-check http://localhost:1340/v1/health-check http://localhost:4200
 
       # run cypress install only when cache was not hit
       - name: Cypress install

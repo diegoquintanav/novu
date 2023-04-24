@@ -32,6 +32,8 @@ jobs:
 
       - uses: ./.github/actions/setup-project
         id: setup-project
+        with:
+          cypress: true
 
       - uses: mansagroup/nrwl-nx-action@v3
         with:

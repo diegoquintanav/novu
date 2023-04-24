@@ -3,6 +3,10 @@ name: Setup Novu Monorepo
 description: Sets up the whole monorepo and install dependencies
 
 inputs:
+  cypress:
+    description: 'To install cypress'
+    required: false
+    default: 'false'
   cypress_version:
     description: 'The version of cypress to install'
     required: false
@@ -26,7 +30,7 @@ runs:
     - uses: pnpm/action-setup@v2
 
     - name: Cypress install
-      if: cypress_version != ''
+      if: ${{cypress == 'true'}}
       uses: cypress-io/github-action@v5
       with:
         # Disable running of tests within install job

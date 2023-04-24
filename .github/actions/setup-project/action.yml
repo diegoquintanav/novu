@@ -29,18 +29,18 @@ runs:
       run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - uses: pnpm/action-setup@v2
 
+    - uses: actions/setup-node@v3
+      name: ⚙️ Setup Node Version
+      with:
+        node-version: '16.15.1'
+        cache: 'pnpm'
+
     - name: Cypress install
       uses: cypress-io/github-action@v5
       with:
         # Disable running of tests within install job
         runTests: false
         version: ${{ inputs.cypress_version }}
-
-    - uses: actions/setup-node@v3
-      name: ⚙️ Setup Node Version
-      with:
-        node-version: '16.15.1'
-        cache: 'pnpm'
 
     - name: 💵 Start Redis
       if: ${{ inputs.slim == 'false' }}

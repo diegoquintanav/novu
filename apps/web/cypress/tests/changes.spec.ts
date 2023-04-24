@@ -70,26 +70,23 @@ describe('Changes Screen', function () {
     createNotification();
     cy.waitForNetworkIdle(500);
     createNotification();
+    cy.waitForNetworkIdle(1000);
 
-    cy.waitLoadTemplatePage(() => {
-      cy.waitForNetworkIdle(500);
+    cy.visit('/changes');
+    cy.waitForNetworkIdle(500);
+    cy.wait(['@changes']);
+    cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('have.length', 2);
+    cy.wait(['@changes']);
+    cy.intercept('**/v1/changes?promoted=false&page=0&limit=10').as('changes-2');
+    cy.awaitAttachedGetByTestId('promote-all-btn').click({ force: true });
+    cy.wait(['@bulk-apply']);
+    cy.wait(['@changes-2']);
+    cy.wait(['@changes-2']);
 
-      cy.visit('/changes');
-      cy.waitForNetworkIdle(500);
-      cy.wait(['@changes']);
-      cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('have.length', 2);
-      cy.wait(['@changes']);
-      cy.intercept('**/v1/changes?promoted=false&page=0&limit=10').as('changes-2');
-      cy.awaitAttachedGetByTestId('promote-all-btn').click({ force: true });
-      cy.wait(['@bulk-apply']);
-      cy.wait(['@changes-2']);
-      cy.wait(['@changes-2']);
+    cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('not.exist');
 
-      cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('not.exist');
-
-      switchEnvironment('Production');
-      cy.waitForNetworkIdle(500);
-    });
+    switchEnvironment('Production');
+    cy.waitForNetworkIdle(500);
 
     cy.visit('/templates');
     cy.wait('@notificationTemplates');

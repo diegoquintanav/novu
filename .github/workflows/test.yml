@@ -130,6 +130,8 @@ jobs:
       - run: echo '${{ needs.get-affected.outputs.test-providers }}'
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-project
+        with:
+          slim: 'true'
       - uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: lint,build,test
@@ -198,6 +200,8 @@ jobs:
       - run: echo ${{ matrix.projectName }}
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-project
+        with:
+          slim: 'true'
       - uses: ./.github/actions/setup-redis-cluster
       - uses: mansagroup/nrwl-nx-action@v3
         with:

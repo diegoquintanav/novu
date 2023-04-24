@@ -2,6 +2,7 @@ describe('Initialization', function () {
   beforeEach(function () {
     cy.intercept('**/widgets/session/initialize**').as('sessionInitialize');
     cy.initializeSession();
+    cy.waitForNetworkIdle(500);
   });
 
   it('should initialize a session', function () {

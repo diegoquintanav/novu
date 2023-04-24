@@ -30,11 +30,11 @@ runs:
     - uses: pnpm/action-setup@v2
 
     - name: Cypress install
-      if: ${{inputs.cypress == 'true'}}
       uses: cypress-io/github-action@v5
       with:
         # Disable running of tests within install job
         runTests: false
+        version: ${{ inputs.cypress_version }}
 
     - uses: actions/setup-node@v3
       name: ⚙️ Setup Node Version

@@ -137,6 +137,7 @@ async function allProjectsContainingTask(taskName) {
 async function printAffectedProjectsContainingTask() {
   const providers = await getPackageFolders('providers');
   const packages = await getPackageFolders('packages');
+  const libs = await getPackageFolders('libs');
 
   let projects =
     BASE_BRANCH_NAME === ALL_FLAG
@@ -153,11 +154,19 @@ async function printAffectedProjectsContainingTask() {
     projects = projects.filter((project) => !packages.includes(project));
   }
 
+  const foundLibs = projects.filter((project) => libs.includes(project));
+  if (foundLibs.length) {
+    projects = projects.filter((project) => !libs.includes(project));
+  }
+
+
   if (GROUP === 'providers') {
     console.log(JSON.stringify(foundProviders));
   } else if (GROUP === 'packages') {
     console.log(JSON.stringify(foundPackages));
-  } else {
+  } else if (GROUP === 'libs') {
+    console.log(JSON.stringify(foundLibs));
+  }  else {
     console.log(JSON.stringify(projects));
   }
 }

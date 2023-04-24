@@ -94,7 +94,6 @@ jobs:
         working-directory: apps/web
         run: pnpm cypress install
 
-
       - uses: browser-actions/setup-chrome@latest
       - run: |
           echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV

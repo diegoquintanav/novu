@@ -201,7 +201,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-project
         with:
-          slim: ${{ !contains(matrix.projectName, '@novu/api') }}
+          # Don't run redis and etc... for other unit tests
+          slim: ${{ !contains(matrix.projectName, '@novu/api') && !contains(matrix.projectName, '@novu/worker') }}
       - uses: ./.github/actions/setup-redis-cluster
       - uses: mansagroup/nrwl-nx-action@v3
         with:

@@ -63,6 +63,8 @@ describe('Notifications List', function () {
       templateId: this.session.templates[0]._id,
     });
 
+    cy.waitForNetworkIdle(500);
+
     cy.getByTestId('unseen-count-label').contains('9');
   });
 

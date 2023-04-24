@@ -89,6 +89,7 @@ describe('Changes Screen', function () {
     switchEnvironment('Production');
     cy.waitForNetworkIdle(500);
 
+    cy.visit('/templates');
     cy.wait('@notificationTemplates');
     cy.waitForNetworkIdle(500);
     cy.awaitAttachedGetByTestId('notifications-template').find('tbody tr').should('have.length', 2);

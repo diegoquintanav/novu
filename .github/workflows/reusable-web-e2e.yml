@@ -35,7 +35,6 @@ jobs:
         with:
           cypress: true
 
-
       - uses: mansagroup/nrwl-nx-action@v3
         with:
           targets: lint,build
@@ -58,8 +57,11 @@ jobs:
         env:
           GITHUB_OAUTH_CLIENT_ID: ${{ secrets.CYPRESS_GITHUB_OAUTH_CLIENT_ID }}
           GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.CYPRESS_GITHUB_OAUTH_CLIENT_SECRET }}
+          NODE_ENV: "test"
+          PORT: "1336"
+          TZ: "UTC"
           GITHUB_OAUTH_REDIRECT: "http://localhost:1336/v1/auth/github/callback"
-        run: cd apps/api && pnpm start:test &
+        run: cd apps/api && pnpm start:build &
 
       - name: Start worker
         run: cd apps/worker && pnpm start:test &

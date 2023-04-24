@@ -25,6 +25,13 @@ runs:
       run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - uses: pnpm/action-setup@v2
 
+    - name: Cypress install
+      if: cypress_version != ''
+      uses: cypress-io/github-action@v5
+      with:
+        # Disable running of tests within install job
+        runTests: false
+
     - uses: actions/setup-node@v3
       name: ⚙️ Setup Node Version
       with:
@@ -40,22 +47,6 @@ runs:
       uses: supercharge/mongodb-github-action@v1.9.0
       with:
         mongodb-version: 4.2.8
-
-    - name: Cache Cypress Binary For Version
-      id: cache-cypress-binary-version
-      if: ${{ inputs.cypress_version != '' }}
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/.cache/Cypress/${{ inputs.cypress_version }}
-        key: cypress-binary-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ inputs.cypress_version }}
-
-    - name: Cache Cypress Binary
-      id: cache-cypress-binary
-      if: ${{ inputs.cypress_version == '' }}
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/.cache/Cypress
-        key: cypress-binary-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: 🛟 Install dependencies
       shell: bash

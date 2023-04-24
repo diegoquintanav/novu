@@ -83,6 +83,7 @@ describe('Changes Screen', function () {
     cy.wait(['@changes-2']);
     cy.wait(['@changes-2']);
 
+    cy.waitForNetworkIdle(700);
     cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('not.exist');
 
     switchEnvironment('Production');

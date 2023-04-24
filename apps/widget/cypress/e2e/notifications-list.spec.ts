@@ -65,6 +65,7 @@ describe('Notifications List', function () {
     });
 
     cy.waitForNetworkIdle(500);
+    cy.wait('@getNotificationsFirstPage');
 
     cy.getByTestId('unseen-count-label').contains('9');
   });

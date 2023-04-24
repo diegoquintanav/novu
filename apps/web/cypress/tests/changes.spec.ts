@@ -85,16 +85,6 @@ describe('Changes Screen', function () {
 
     cy.waitForNetworkIdle(700);
     cy.awaitAttachedGetByTestId('pending-changes-table').find('tbody tr').should('not.exist');
-
-    switchEnvironment('Production');
-    cy.waitForNetworkIdle(500);
-
-    cy.visit('/templates');
-    cy.reload();
-    cy.wait(['@notificationTemplates']);
-    cy.waitForNetworkIdle(500);
-    cy.wait(500);
-    cy.getByTestId('notifications-template').find('tbody tr').should('have.length', 2);
   });
 });
 

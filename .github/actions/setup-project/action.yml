@@ -3,10 +3,6 @@ name: Setup Novu Monorepo
 description: Sets up the whole monorepo and install dependencies
 
 inputs:
-  cypress:
-    description: 'To install cypress'
-    required: false
-    default: 'false'
   cypress_version:
     description: 'The version of cypress to install'
     required: false
@@ -35,13 +31,6 @@ runs:
         node-version: '16.15.1'
         cache: 'pnpm'
 
-    - name: Cypress install
-      uses: cypress-io/github-action@v5
-      with:
-        # Disable running of tests within install job
-        runTests: false
-        version: ${{ inputs.cypress_version }}
-
     - name: 💵 Start Redis
       if: ${{ inputs.slim == 'false' }}
       uses: supercharge/redis-github-action@1.5.0
@@ -51,6 +40,22 @@ runs:
       uses: supercharge/mongodb-github-action@v1.9.0
       with:
         mongodb-version: 4.2.8
+
+    - name: Cache Cypress Binary For Version
+      id: cache-cypress-binary-version
+      if: ${{ inputs.cypress_version != '' }}
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.cache/Cypress/${{ inputs.cypress_version }}
+        key: cypress-binary-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ inputs.cypress_version }}
+
+    - name: Cache Cypress Binary
+      id: cache-cypress-binary
+      if: ${{ inputs.cypress_version == '' }}
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.cache/Cypress
+        key: cypress-binary-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: 🛟 Install dependencies
       shell: bash
